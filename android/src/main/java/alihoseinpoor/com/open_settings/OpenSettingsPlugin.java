@@ -2,6 +2,8 @@ package alihoseinpoor.com.open_settings;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.provider.Settings;
 
 import androidx.annotation.NonNull;
 
@@ -98,7 +100,7 @@ public class OpenSettingsPlugin implements FlutterPlugin, MethodCallHandler {
 
                 case "application_details":
                     target = "android.settings.APPLICATION_DETAILS_SETTINGS";
-                    handleJumpToSetting(target);
+                    handleJumpToAppSetting();
                     break;
 
                 case "application_development":
@@ -425,7 +427,15 @@ public class OpenSettingsPlugin implements FlutterPlugin, MethodCallHandler {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         mContext.startActivity(intent);
     }
-
+    private void handleJumpToAppSetting() {
+        Intent intent = new Intent();
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        Uri uri = Uri.fromParts("package", mContext.getPackageName(), null);
+        intent.setData(uri);
+        mContext.startActivity(intent);
+   
+    }
     @Override
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
         channel.setMethodCallHandler(null);
